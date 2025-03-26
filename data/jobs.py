@@ -1,17 +1,19 @@
-import datetime
-import sqlalchemy
+import sqlalchemy as sa
 from sqlalchemy import orm
-
 from .db_session import SqlAlchemyBase
 
 
-class Jobs(SqlAlchemyBase):
+class Jobs(SqlAlchemyBase):  # SqlAlchemyBase Доступно в задании
     __tablename__ = 'jobs'
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    team_leader_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))  # id лидера
+    team_leader = orm.relationship("User")
+    job = sa.Column(sa.Text)  # описание
+    work_size = sa.Column(sa.Integer)  # в часах
+    collaborators = sa.Column(sa.String)  # список id
+    start_date = sa.Column(sa.Date)
+    send_date = sa.Column(sa.Date)
+    is_finished = sa.Column(sa.Boolean, default=False)
 
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    team_leader = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    job = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    work_size = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    collaborators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
-    is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
+    def __repr__(self):
+        return f"<Jobs {self.id} {self.job} {self.is_finished}>"

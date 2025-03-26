@@ -1,20 +1,29 @@
-import datetime
-import sqlalchemy
+from datetime import datetime
 
+import sqlalchemy as sa
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 from .db_session import SqlAlchemyBase
-from sqlalchemy import orm
 
 
-class User(SqlAlchemyBase):
+class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'users'
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    surname = sa.Column(sa.String)
+    name = sa.Column(sa.String)
+    age = sa.Column(sa.Integer)
+    position = sa.Column(sa.String)  # должность
+    speciality = sa.Column(sa.String)  # профессия
+    address = sa.Column(sa.String)
+    email = sa.Column(sa.String, unique=True)
+    hashed_password = sa.Column(sa.String)
+    modified_date = sa.Column(sa.DateTime, default=datetime.now)
 
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    age = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    position = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
+
+    def __repr__(self):
+        return f"<User {self.id} {self.name} {self.email}>"
