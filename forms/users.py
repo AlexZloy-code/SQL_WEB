@@ -13,7 +13,7 @@ class RegisterForm(FlaskForm):
     def validate_login(form, field):
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == field.data).first():
-            raise ValidationError("Такой пользователь уэе существует")
+            raise ValidationError("Такой пользователь уже существует")
 
     password = PasswordField("Password", validators=[DataRequired()])
     repeat_password = PasswordField("Repeat Password",
