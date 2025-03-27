@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from data import db_session
@@ -212,6 +212,16 @@ def work_log():
 @app.route("/")
 def index():
     return redirect("/work-log")
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 def main():

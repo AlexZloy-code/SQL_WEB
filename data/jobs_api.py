@@ -27,13 +27,3 @@ def get_job(job_id):
     return jsonify(
         {"jobs": [job.to_dict()]}
     )
-
-
-@jobs_api.errorhandler(404)
-def not_found(error):
-    return jsonify({"error": f"{error.name}. {error.description}"}), error.code
-
-
-@jobs_api.errorhandler(400)
-def not_found(error):
-    return jsonify({"error": f"{error.name}. {error.description}"}), error.code
