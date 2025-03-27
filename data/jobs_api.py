@@ -13,21 +13,22 @@ jobs_api = Blueprint("jobs_api",
 @jobs_api.route("/api/jobs/")
 def get_jobs():
     db_sess = db_session.create_session()
+
     jobs = db_sess.query(Jobs).all()
-    return jsonify(
-        {"jobs": [job.to_dict() for job in jobs]}
-    )
+
+    return jsonify({"jobs": [job.to_dict() for job in jobs]})
 
 
 @jobs_api.route("/api/jobs/<int:job_id>")
 def get_job(job_id):
     db_sess = db_session.create_session()
+
     job = db_sess.query(Jobs).get(job_id)
+
     if not job:
         return make_response(jsonify({'error': 'Not found'}), 404)
-    return jsonify(
-        {"jobs": [job.to_dict()]}
-    )
+
+    return jsonify({"jobs": [job.to_dict()]})
 
 
 @jobs_api.route("/api/jobs/", methods=["POST"])
@@ -67,6 +68,21 @@ def create_job():
         return make_response(jsonify({'error': 'Id already exists'}), 400)
 
     db_sess.add(job)
+    db_sess.commit()
+
+    return jsonify({'success': 'OK'})
+
+
+@jobs_api.route("/api/jobs/<int:job_id>", methods=["DELETE"])
+def delete_job(job_id):
+    db_sess = db_session.create_session()
+
+    job = db_sess.query(Jobs).get(job_id)
+
+    if not job:
+        return make_response(jsonify({'error': 'Not found'}), 404)
+
+    db_sess.delete(job)
     db_sess.commit()
 
     return jsonify({'success': 'OK'})
