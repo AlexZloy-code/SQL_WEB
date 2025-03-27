@@ -22,7 +22,7 @@ def get_jobs():
 @jobs_api.route("/api/jobs/<int:job_id>")
 def get_job(job_id):
     db_sess = db_session.create_session()
-    job: Jobs = db_sess.get(Jobs, job_id)
+    job = db_sess.query(Jobs).get(job_id)
     if not job:
         raise NotFound()
     return jsonify(
