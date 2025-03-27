@@ -49,7 +49,7 @@ data = {
 print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
-print("создание работы")
+print("Создание работы")
 job_id = 999
 data = {
     "id": job_id,
@@ -64,9 +64,9 @@ data = {
 print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
-print("проверка создания работы")
+print("Проверка создания работы")
 p(get(f"{BASE_URL}/api/jobs/").json())
 print('\n\n\n')
 
-print("одна эта созданая работа")
+print("Одна эта созданая работа")
 p(get(f"{BASE_URL}/api/jobs/{job_id}").json())
