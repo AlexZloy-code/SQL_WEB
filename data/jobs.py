@@ -22,7 +22,7 @@ class Jobs(SqlAlchemyBase):
     work_size = sa.Column(sa.Integer)
     collaborators = sa.Column(sa.String)
     start_date = sa.Column(sa.Date)
-    end_date = sa.Column(sa.Date)
+    send_date = sa.Column(sa.Date)
     categories = orm.relationship("Category", secondary=association_table, backref="jobs")
     is_finished = sa.Column(sa.Boolean, default=False)
 
