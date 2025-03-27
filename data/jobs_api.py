@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify, request
-from werkzeug.exceptions import NotFound
+from flask import Blueprint, jsonify, make_response
 
 from . import db_session
 from .jobs import Jobs
@@ -24,7 +23,7 @@ def get_job(job_id):
     db_sess = db_session.create_session()
     job = db_sess.query(Jobs).get(job_id)
     if not job:
-        raise NotFound()
+        return make_response(jsonify({'error': 'Not found'}), 404)
     return jsonify(
         {"jobs": [job.to_dict()]}
     )
