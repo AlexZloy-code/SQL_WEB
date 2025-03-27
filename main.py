@@ -2,12 +2,17 @@ from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from data import db_session
+
 from data.users import User
 from data.jobs import Jobs
 from data.departments import Department
+
 from forms.users import RegisterForm, LoginForm
 from forms.jobs import AddJobForm
 from forms.departments import AddDepartmentForm
+
+from data.jobs_api import jobs_api
+
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -211,6 +216,7 @@ def index():
 
 def main():
     db_session.global_init("db/blogs.db")
+    app.register_blueprint(jobs_api)
     app.run("127.0.0.1", port=8000)
 
 
