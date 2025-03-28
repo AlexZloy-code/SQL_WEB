@@ -1,5 +1,4 @@
 from requests import delete, get
-from pprint import pprint as p
 
 
 BASE_URL = "http://127.0.0.1:8000/"
