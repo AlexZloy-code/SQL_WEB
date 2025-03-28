@@ -17,6 +17,7 @@ def get_users_data():
             "position": "captain",
             "speciality": "research engineer",
             "address": "module_1",
+            "city_from": "Washington",
             "email": "scott_chief@mars.org",
             "hashed_password": generate_password_hash("secret_of_cap"),
             "modified_date": datetime.now()
@@ -28,6 +29,7 @@ def get_users_data():
             "position": "science pilot",
             "speciality": "drone pilot",
             "address": "module_2",
+            "city_from": "Wellington",
             "email": "andy_story@mars.org",
             "hashed_password": generate_password_hash("andy_23"),
             "modified_date": datetime.now()
@@ -39,6 +41,7 @@ def get_users_data():
             "position": "mission specialist",
             "speciality": "astrogeologist",
             "address": "module_3",
+            "city_from": "Moscow",
             "email": "mark3@mars.org",
             "hashed_password": generate_password_hash("marsWWWatney"),
             "modified_date": datetime.now()
@@ -50,6 +53,7 @@ def get_users_data():
             "position": "flight engineer",
             "speciality": "cyberengineer",
             "address": "module_4",
+            "city_from": "Tunis",
             "email": "kapoor_astro@mars.org",
             "hashed_password": generate_password_hash("cyberkapoor25"),
             "modified_date": datetime.now()
@@ -61,6 +65,7 @@ def get_users_data():
             "position": "chief engineer",
             "speciality": "builder",
             "address": "module_1",
+            "city_from": "Roma",
             "email": "bean@mars.org",
             "hashed_password": generate_password_hash("seanlikesbeans1"),
             "modified_date": datetime.now()
