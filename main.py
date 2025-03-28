@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, request, abort, jsonify, make_response
+from flask import Flask, render_template, redirect, request, abort, jsonify, make_response, url_for, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import os
+import requests
 
 from data import db_session
 
@@ -12,6 +13,7 @@ from forms.users import RegisterForm, LoginForm
 from forms.jobs import AddJobForm
 from forms.departments import AddDepartmentForm
 
+from data.users_api import users_api
 from data.jobs_api import jobs_api
 
 
@@ -71,6 +73,49 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+
+@app.route("/users_show/<int:user_id>")
+def users_show(user_id):
+    resp = requests.get(f'{request.host_url}{url_for("users_api.get_user", user_id=user_id)}')
+
+    if not resp:
+        return make_response(jsonify({'error': 'Not found'}), 404)
+    
+    user = resp.json()["users"][0]
+    user_city = user["city_from"]
+
+    geocoder_params = {
+        "apikey": "8013b162-6b42-4997-9691-77b7074026e0",
+        "geocode": user_city,
+        "format": "json"
+    }
+
+    geocode_resp = requests.get("http://geocode-maps.yandex.ru/1.x/", params=geocoder_params)
+
+    if not geocode_resp:
+        return make_response(jsonify({'error': f"Ошибка geocoder. Статус: {geocode_resp.status_code}. {geocode_resp.reason}"}), 400)
+    geocode_json = geocode_resp.json()
+
+    try:
+        point = geocode_json["response"]["GeoObjectCollection"]["featureMember"][0][
+            "GeoObject"]["Point"]["pos"]
+    except (KeyError, IndexError):
+        return make_response(jsonify({'error': 'Not found'}), 404)
+
+    point = ",".join(point.split())
+
+    map_static_params = {
+        "ll": point,
+        "l": "sat",
+        "z": 13,
+    }
+
+    map_url = requests.Request(url="https://static-maps.yandex.ru/1.x/",
+                               params=map_static_params).prepare().url
+
+    return render_template("user_city.html", user_data=user, map_url=map_url)
 
 
 @app.route("/add-job", methods=["GET", "POST"])
@@ -222,13 +267,17 @@ def index():
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found(_):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
+@app.errorhandler(500)
+def bad_request(error):
+    return make_response(jsonify({'error': f'С сервером неполадки, я честно исправлю (нет), если что ошибка: {error}'}), 500)
 
 
 def main():
@@ -237,6 +286,7 @@ def main():
         add_data_to_Base_of_Data()
     db_session.global_init("db/blogs.db")
     app.register_blueprint(jobs_api)
+    app.register_blueprint(users_api)
     app.run("127.0.0.1", port=8000)
 
 
