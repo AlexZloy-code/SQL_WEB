@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, abort, jsonify, mak
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import os
 import requests
+from flask_restful import Api
 
 from data import db_session
 
@@ -16,6 +17,8 @@ from forms.departments import AddDepartmentForm
 from data.users_api import users_api
 from data.jobs_api import jobs_api
 
+from data.users_resources import init_api_routes
+
 
 def add_data_to_Base_of_Data():
     from data import samples
@@ -25,6 +28,7 @@ def add_data_to_Base_of_Data():
 app = Flask(__name__)
 login_manager = LoginManager(app)
 app.config["SECRET_KEY"] = "yandexlyceum_secret_key"
+api = Api(app)
 
 
 @login_manager.user_loader
@@ -286,7 +290,7 @@ def main():
         add_data_to_Base_of_Data()
     db_session.global_init("db/blogs.db")
     app.register_blueprint(jobs_api)
-    app.register_blueprint(users_api)
+    init_api_routes(api)
     app.run("127.0.0.1", port=8000)
 
 

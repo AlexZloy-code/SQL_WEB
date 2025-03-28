@@ -20,6 +20,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     email = sa.Column(sa.String, unique=True)
     hashed_password = sa.Column(sa.String)
     modified_date = sa.Column(sa.DateTime, default=datetime.now)
+    is_published = sa.Column(sa.Boolean, default=True)
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

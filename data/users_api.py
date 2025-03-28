@@ -36,7 +36,7 @@ def create_user():
     if not request.json:
         return make_response(jsonify({'error': 'Empty request'}), 400)
     
-    allowed_fields = ["id", "surname", "name", "age", "position", "speciality", "address", "email", "hashed_password", "modified_date"] 
+    allowed_fields = ["id", "surname", "name", "age", "position", "speciality", "address", "email", "city_from", "hashed_password", "modified_date"] 
 
     if not all(key in request.json for key in allowed_fields):
         return make_response(jsonify({'error': 'Missing fields'}), 400)
@@ -64,6 +64,7 @@ def create_user():
         speciality=request.json["speciality"],
         address=request.json["address"],
         email=request.json["email"],
+        city_from=request.json["city_from"],
         hashed_password=password_hash,
         modified_date=modified_date,
     )
@@ -104,7 +105,7 @@ def edit_user(user_id):
     if not request.json:
         return make_response(jsonify({'error': 'Empty request'}), 400)
 
-    allowed_fields = ["id", "surname", "name", "age", "position", "speciality", "address", "email", "hashed_password", "modified_date"]
+    allowed_fields = ["id", "surname", "name", "age", "position", "speciality", "address", "city_from", "email", "hashed_password", "modified_date"]
 
     if not all(key in request.json for key in allowed_fields):
         return make_response(jsonify({'error': 'Missing fields'}), 400)
@@ -129,6 +130,7 @@ def edit_user(user_id):
     user.speciality = request.json["speciality"]
     user.address = request.json["address"]
     user.email = request.json["email"]
+    user.city_from = request.json["city_from"]
     user.hashed_password = password_hash
     user.modified_date = modified_date
 
