@@ -10,7 +10,7 @@ BASE_URL = "http://127.0.0.1:8000/"
 
 print("Пустой запрос")
 data = {}
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Поле modified_date отсутсвует")
@@ -25,7 +25,7 @@ data = {
     "email": "sanders@mars.org",
     "hashed_password": generate_password_hash("teddy_bear27"),
 }
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Поле id отсутсвует")
@@ -40,7 +40,7 @@ data = {
     "hashed_password": generate_password_hash("teddy_bear27"),
     "modified_date": datetime.datetime.now().isoformat(),
 }
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Неверный тип шифровки")
@@ -56,7 +56,7 @@ data = {
     "hashed_password": generate_password_hash("teddy_bear27", method="pbkdf2:sha1"),
     "modified_date": datetime.datetime.now().isoformat(),
 }
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Существующий пользователь")
@@ -72,13 +72,13 @@ data = {
     "hashed_password": generate_password_hash("teddy_bear27"),
     "modified_date": datetime.datetime.now().isoformat(),
 }
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Создание пользователя")
-user_id = 999
+job_id = 999
 data = {
-    "id": user_id,
+    "id": job_id,
     "surname": "Sanders",
     "name": "Teddy",
     "age": 27,
@@ -89,12 +89,12 @@ data = {
     "hashed_password": generate_password_hash("teddy_bear27"),
     "modified_date": datetime.datetime.now().isoformat(),
 }
-print(post(f"{BASE_URL}/api/users", json=data).json())
+print(post(f"{BASE_URL}/api/jobs", json=data).json())
 print('\n\n\n')
 
 print("Проверка создания пользователя")
-p(get(f"{BASE_URL}/api/users/").json())
+p(get(f"{BASE_URL}/api/jobs/").json())
 print('\n\n\n')
 
 print("Один этот созданый пользователь")
-p(get(f"{BASE_URL}/api/users/{user_id}").json())
+p(get(f"{BASE_URL}/api/jobs/{job_id}").json())

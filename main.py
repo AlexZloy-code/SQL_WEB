@@ -17,7 +17,7 @@ from forms.departments import AddDepartmentForm
 from data.users_api import users_api
 from data.jobs_api import jobs_api
 
-from data.users_resources import init_api_routes
+from data.job_resources import init_api_routes
 
 
 def add_data_to_Base_of_Data():
@@ -289,7 +289,7 @@ def main():
         db_session.global_init("db/blogs.db")
         add_data_to_Base_of_Data()
     db_session.global_init("db/blogs.db")
-    app.register_blueprint(jobs_api)
+    app.register_blueprint(users_api)
     init_api_routes(api)
     app.run("127.0.0.1", port=8000)
 
