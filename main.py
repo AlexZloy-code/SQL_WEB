@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, abort, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+import os
 
 from data import db_session
 
@@ -12,6 +13,11 @@ from forms.jobs import AddJobForm
 from forms.departments import AddDepartmentForm
 
 from data.jobs_api import jobs_api
+
+
+def add_data_to_Base_of_Data():
+    from data import samples
+    samples.add_data_to_db()
 
 
 app = Flask(__name__)
@@ -226,6 +232,9 @@ def bad_request(_):
 
 
 def main():
+    if not os.path.exists("db/blogs.db"):
+        db_session.global_init("db/blogs.db")
+        add_data_to_Base_of_Data()
     db_session.global_init("db/blogs.db")
     app.register_blueprint(jobs_api)
     app.run("127.0.0.1", port=8000)

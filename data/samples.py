@@ -7,6 +7,7 @@ from data.jobs import Jobs, Category
 from data.users import User
 from data.departments import Department
 
+print('База данных заполненая базовыми значениями, капитан корабля: scott_chief@mars.org, его пароль: secret_of_cap')
 
 def get_users_data():
     users_data = [
